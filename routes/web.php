@@ -8,14 +8,18 @@ use App\Http\Controllers\RedeemController;
 use App\Http\Controllers\DashboardController;
 
 
-// Display the form (assuming a single page for both forms)
-Route::get('/', function () {
-    return view('index_JP');
-});
 
-Route::get('/en', function () {
-    return view('index_EN');
-});
+//Route::middleware('auth')->group(function () {
+
+    Route::get('/', function () {
+        return view('index_JP');
+    });
+
+    Route::get('/en', function () {
+        return view('index_EN');
+    });
+
+//});
 
 // Handle form submissions
 Route::post('/mint', [MintController::class, 'store']);
@@ -35,6 +39,7 @@ Route::get('/mint/success', function () {
 })->name('mint.success');
 
 //Auth stuff
+Route::post('/redeems/{redeem}/redeem', [RedeemController::class, 'markAsRedeemed'])->name('redeems.redeem');
 
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])

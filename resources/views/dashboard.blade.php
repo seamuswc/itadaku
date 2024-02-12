@@ -52,7 +52,7 @@
                                     <!-- Redeem Form -->
                                     @if (!$redeem->redeemed)
                                         <!-- Tracking Form -->
-                                        <form action="{{ route('redeems.redeem', $redeem->id) }}" method="POST">
+                                        <form action="{{ route('redeems.redeem', $redeem->nft_id) }}" method="POST">
                                             @csrf
                                             <div class="form-group">
                                                 <label for="shipping_number-{{ $redeem->id }}">Shipping Number</label>
@@ -78,8 +78,8 @@
                         <div class="done-list mt-4">
                             @forelse ($dones as $done)
                                     <div class="done bg-gray-50 p-4 rounded-lg shadow mb-4">
-                                        <p>ID: {{ $done->id }}</p>
-                                        <p>Tracking Number: {{ $done->tracking_number }}</p>        
+                                        <p>ID: {{ $done->redeem_id }}</p>
+                                        <p>Tracking Number: {{ $done->shipping_number }}</p>        
                                     </div>
                                 @empty
                                     <p>No Dones found.</p>

@@ -11,10 +11,9 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $mints = Mint::all();
-        $redeems = Redeem::all();
-        $dones = Done::all();
-
+        $mints = Mint::orderBy('created_at', 'desc')->get();
+        $redeems = Redeem::orderBy('created_at', 'desc')->get();
+        $dones = Done::orderBy('created_at', 'desc')->get();
 
         return view('dashboard', compact('mints', 'redeems', 'dones'));
     }

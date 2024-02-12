@@ -642,7 +642,7 @@ const config = {
             "type": "function"
         }
     ],
-    TOKEN_URI: "meta.json"
+    TOKEN_URI: "/meta.json"
 };
 
 

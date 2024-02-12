@@ -1,4 +1,4 @@
-import {connectWallet, approveDAI, mintNFT, getDAIAllowance, web3, mintEvent } from "./eth_code";
+import {connectWallet, approveDAI, mintNFT, getDAIAllowance, web3, mintEvent, pullNFT } from "./eth_code";
 
 // Function to validate an email
 function validateEmail(email) {
@@ -88,12 +88,35 @@ $(document).ready(function() {
     }
 
     if (redeemForm.length > 0) {
-        redeemForm.on('submit', function(event) {
+        redeemForm.on('submit', async function(event) {
             if (!validateForm(redeemForm)) {
                 event.preventDefault();
             }
 
-            //nftContract.methods.approve(contractAddress, tokenId).send({ from: userAddress });
+            //validate
+            // Check if the value is a digit
+            //if ($.isNumeric(nftId)) {
+
+            //connect to MetaMask
+            const walletConnected = await connectWallet();
+            if(!walletConnected) {
+                return;
+            }
+
+
+            var nftId = $('input[name="nft_id"]').val();
+
+           let tx_hash = await pullNFT(nftId);
+
+
+            
+            if(nftId || tx_hash) {
+                $('#tx_hash').val(tx_hash);
+
+                redeemForm.off('submit').submit();
+            }
+
+
 
         });
     }

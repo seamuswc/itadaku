@@ -38,6 +38,19 @@ Route::get('/mint/success', function () {
     return view('mint_success');
 })->name('mint.success');
 
+//redeem success
+Route::get('/redeem/success', function () {
+    if (!session('form_submitted')) {
+        // If the form was not submitted, redirect to a different page
+        return redirect('/');
+    }
+
+    // Clear the session variable
+    session()->forget('form_submitted');
+
+    return view('mint_success');
+})->name('redeem.success');
+
 //Auth stuff
 Route::post('/redeems/{redeem}/redeem', [RedeemController::class, 'markAsRedeemed'])->name('redeems.redeem');
 

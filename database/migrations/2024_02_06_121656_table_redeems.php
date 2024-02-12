@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('mailing_address_3');
             $table->integer('nft_id');
             $table->boolean('redeemed')->default(false);
+            $table->string('tx_hash', 70);
             $table->timestamps();
         });
     }

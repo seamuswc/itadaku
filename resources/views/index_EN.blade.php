@@ -66,6 +66,9 @@
                 <br>
 
                 <div class="field custom-field">
+                    <input class="input" type="nft_id" name="nft_id" placeholder="ID of NFT">
+                </div>
+                <div class="field custom-field">
                     <input class="input" type="email" name="email" placeholder="Email">
                 </div>
                 <div class="field custom-field">

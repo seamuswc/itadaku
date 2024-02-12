@@ -119,42 +119,9 @@ export async function mintEvent() {
     return events[events.length - 1].returnValues.tokenId || null;
 }
 
-/*()
-export async function mintEvent2() {
+
+export async function pullNFT(tokenId) {
     const nftContract = new web3.eth.Contract(config.ABI, config.CONTRACT_ADDRESS);
-    const events = await nftContract.getPastEvents('NFTMinted', { fromBlock: 0, toBlock: 'latest' });
-
-    // Debug: Log the full event object to inspect its structure
-    console.log("Events:", events.returnValues.tokenId);
+    let estimatedGas = await nftContract.methods.pullNFT().estimateGas({ from: userAddress });
+    nftContract.methods.pullNFT(tokenId).send({ from: userAddress, gas: estimatedGas });
 }
-*/
-
-
-
-
-
-
-/*
-export async function mintEvent() {
-    const nftContract = new web3.eth.Contract(config.ABI, config.CONTRACT_ADDRESS);
-
-    // Get the current block number
-    const currentBlock = await web3.eth.getBlockNumber();
-
-    // Calculate the starting block as current block - 2
-    const fromBlock = currentBlock - 25;
-
-    // Use this block number as the starting point for listening to events
-    nftContract.events.NFTMinted({
-        filter: {from: userAddress}, // You can also use {to: interestedAddress} or both
-        fromBlock: fromBlock,
-        toBlock: 'latest' // You can adjust this as needed
-    })
-    .on('data', function(event) {
-        nft_id = event.returnValues.tokenId;
-        console.log("Event received:", nft_id);
-    })
-    .on('error', console.error);
-}
-
-*/

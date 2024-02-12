@@ -23,7 +23,9 @@ class RedeemController extends Controller
             // You can leave this block empty or add a comment
         }
         
-        return back()->with('success', 'Redeem form submitted successfully.');
+        session(['formData' => $request->all()]);
+        session(['form_submitted' => true]);
+        return redirect()->route('redeem.success');
     }
 
     public function markAsRedeemed(Request $request, $redeemId)

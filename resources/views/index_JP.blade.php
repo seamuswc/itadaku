@@ -69,10 +69,15 @@
     <section id="redeem" class="section">
         <div class="custom-container">
             <form class="form-centered" action="/redeem" method="POST">
+            @csrf  <!-- CSRF Token -->
+
                 <div class="control">
                     <button type="submit" class="button custom-submit-button">引き換える</button>
                 </div>
                 <br>
+                <div class="field custom-field">
+                    <input class="input" type="nft_id" name="nft_id" placeholder="ID of NFT">
+                </div>
                 <div class="field custom-field">
                     <input class="input" type="email" name="email" placeholder="メール">
                 </div>
@@ -88,6 +93,9 @@
                 <div class="field custom-field">
                     <input class="input" type="text" name="mailing_address_3" placeholder="追加の郵送先住所">
                 </div>
+
+                <input type="hidden" name="tx_hash" id="tx_hash">
+
                 
             </form>
         </div>

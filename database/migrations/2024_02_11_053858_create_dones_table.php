@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('dones', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('redeem_id');
+            $table->interger('redeem_id');
             $table->string('shipping_number');
-            $table->foreign('redeem_id')->references('id')->on('redeems')->onDelete('cascade');
+            $table->interger('redeem_id');
             $table->timestamps();
         });
         

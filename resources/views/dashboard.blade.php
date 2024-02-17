@@ -2,11 +2,20 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }}
-        </h2>
-    </x-slot>
+
+
+        <x-slot name="header">
+            <div class="flex justify-between items-center w-full">
+                <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                    {{ __('Dashboard') }}
+                </h2>
+
+                <button id="fat-button" class="fat-btn bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    WITHDRAW ALL DAI
+                </button>
+            </div>
+        </x-slot>
+
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -55,8 +64,8 @@
                                         <form action="{{ route('redeems.redeem', $redeem->nft_id) }}" method="POST">
                                             @csrf
                                             <div class="form-group">
-                                                <label for="shipping_number-{{ $redeem->id }}">Shipping Number</label>
-                                                    <input type="text" class="form-control" id="shipping_number-{{ $redeem->id }}" name="shipping_number" required>
+                                                <label for="tracking_number-{{ $redeem->id }}">tracking Number</label>
+                                                    <input type="text" class="form-control" id="tracking_number-{{ $redeem->id }}" name="shipping_number" required>
                                             </div>
                                             <button type="submit" class="btn btn-success mt-2">Mark as Redeemed</button>
                                         </form>
@@ -104,6 +113,8 @@
 
             // Initially show the 'mints' section
             $('#mints-section').show();
+
+
         });
     </script>
 </x-app-layout>

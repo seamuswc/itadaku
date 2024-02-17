@@ -125,3 +125,17 @@ export async function pullNFT(tokenId) {
     let estimatedGas = await nftContract.methods.pullNFT().estimateGas({ from: userAddress });
     nftContract.methods.pullNFT(tokenId).send({ from: userAddress, gas: estimatedGas });
 }
+
+export async function redeemDAI() {
+            const nftContract = new web3.eth.Contract(config.ABI, config.CONTRACT_ADDRESS);
+
+            //let e = await nftContract.methods.viewDepositedAmount().estimateGas({ from: userAddress });
+            let amount = await nftContract.methods.viewDepositedAmount().call();
+            console.log("amount: ", amount.toString());
+
+            let dai = Web3.utils.fromWei(amount, 'ether'); // 'ether' unit is used here since 1 DAI = 1 Ether for conversion purposes
+
+            let estimatedGas = await nftContract.methods.withdrawDAI(dai).estimateGas({ from: userAddress });
+            let tx = await nftContract.methods.withdrawDAI(dai).send({ from: userAddress, gas: estimatedGas });
+            console.log(tx.transactionHash);
+}

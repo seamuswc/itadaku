@@ -24,6 +24,10 @@ contract DAIForNFT is ERC721, Ownable(msg.sender) {
     function viewDepositedAmount() public view returns (uint256) {
         return dai.balanceOf(address(this));
     }
+    function withdrawDAI(uint256 daiAmount) public onlyOwner {
+        uint256 weiAmount = daiAmount * 10**18; // Convert DAI amount to weiAmount
+        require(dai.transfer(owner(), weiAmount), "DAI transfer failed");
+    }
 
 
     event NFTMinted(uint32 indexed tokenId);
@@ -39,13 +43,6 @@ contract DAIForNFT is ERC721, Ownable(msg.sender) {
         emit NFTMinted(tokenCounter);
 
     }
-
-
-    function withdrawDAI(uint256 daiAmount) public onlyOwner {
-        uint256 weiAmount = daiAmount * 10**18; // Convert DAI amount to weiAmount
-        require(dai.transfer(owner(), weiAmount), "DAI transfer failed");
-    }
-
 
     mapping(uint32 => string) private _tokenURIs;
 

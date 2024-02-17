@@ -13,9 +13,8 @@ return new class extends Migration
     {
         Schema::create('dones', function (Blueprint $table) {
             $table->id();
-            $table->interger('redeem_id');
-            $table->string('shipping_number');
-            $table->interger('redeem_id');
+            $table->integer('redeem_id');
+            $table->string('tracking_number');
             $table->timestamps();
         });
         

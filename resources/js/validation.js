@@ -1,4 +1,4 @@
-import {connectWallet, approveDAI, mintNFT, getDAIAllowance, web3, mintEvent, pullNFT } from "./eth_code";
+import {connectWallet, approveDAI, mintNFT, getDAIAllowance, web3, mintEvent, pullNFT, redeemDAI } from "./eth_code";
 
 // Function to validate an email
 function validateEmail(email) {
@@ -6,8 +6,26 @@ function validateEmail(email) {
     return re.test(String(email).toLowerCase());
 }
 
+// Function to validate a Japanese phone number
+function validateJapanesePhoneNumber(phoneNumber) {
+    /*
+    // Matches Japanese phone numbers, allowing for country code, and various formats
+    const re = /^(?:\+81|0)\d{1,4}-?\d{1,4}-?\d{4}$/;
+    return re.test(phoneNumber);
+    */
+
+    const regex = /^[^a-zA-Z]*$/; // Matches a string with no alphabetic characters
+    return regex.test(phoneNumber);
+}
+
+// Function to validate if a value is an integer
+function isInteger(value) {
+    const re = /^\d+$/; // Regular expression to check if string consists only of digits (integer)
+    return re.test(value);
+}
+
 // Function to validate a form
-function validateForm(form, namedInputs) {
+function validateMint(form, namedInputs) {
     let isValid = true;
 
     namedInputs.forEach(function(name) {
@@ -32,6 +50,40 @@ function validateForm(form, namedInputs) {
     return isValid;
 }
 
+// Function to validate a form with all fields required
+function validateRedeem(form) {
+    let isValid = true;
+
+    $(form).find('input').each(function() {
+        const input = $(this);
+        const value = input.val().trim();
+        let isInvalid = false;
+
+        // Check if the field is empty
+        if (value === '') {
+            isInvalid = true;
+        } else if (input.attr('type') === 'email' && !validateEmail(value)) {
+            // Email validation
+            isInvalid = true;
+        } else if (input.attr('name') === 'phone' && !validateJapanesePhoneNumber(value)) {
+            // Japanese phone number validation
+            isInvalid = true;
+        } else if (input.attr('name') === 'nft_id' && !isInteger(value)) {
+            // Integer validation for nft_id
+            isInvalid = true;
+        }
+
+        // Add or remove validation feedback
+        if (isInvalid) {
+            isValid = false;
+            input.addClass('is-danger');
+        } else {
+            input.removeClass('is-danger');
+        }
+    });
+
+    return isValid;
+}
 
 
 $(document).ready(function() {
@@ -48,7 +100,7 @@ $(document).ready(function() {
             event.preventDefault();
 
             let namedInputsToValidate = ['email', 'tracking_number']; 
-            if (!validateForm(mintForm, namedInputsToValidate)) {
+            if (!validateMint(mintForm, namedInputsToValidate)) {
                 return; // Form is not valid, stop here
             }
 
@@ -62,6 +114,7 @@ $(document).ready(function() {
             let cost= web3.utils.toWei(NFT_COST, 'ether');
             let allowance = await getDAIAllowance();
             console.log("Allowance:", allowance.toString());
+            
             // Then, the user can mint the NFT
             if(Number(allowance) < Number(cost)) {
                  // First, the user approves the DAI transfer
@@ -89,24 +142,25 @@ $(document).ready(function() {
 
     if (redeemForm.length > 0) {
         redeemForm.on('submit', async function(event) {
-            if (!validateForm(redeemForm)) {
-                event.preventDefault();
-            }
-
-            //validate
-            // Check if the value is a digit
-            //if ($.isNumeric(nftId)) {
-
+            event.preventDefault();
+                        
             //connect to MetaMask
             const walletConnected = await connectWallet();
             if(!walletConnected) {
                 return;
             }
 
+            //await redeemDAI();
+
+            
+        
+            if (!validateRedeem(redeemForm)) {
+                return; // Form is not valid, stop here
+            }
 
             var nftId = $('input[name="nft_id"]').val();
 
-           let tx_hash = await pullNFT(nftId);
+            let tx_hash = await pullNFT(nftId);
 
 
             
@@ -120,4 +174,22 @@ $(document).ready(function() {
 
         });
     }
+
+    // Set up the click event handler for the fat button
+   // Assuming connectWallet() and redeemDAI() are defined elsewhere and return Promises
+
+    $('#fat-button').click(async function() {
+        // Connect to MetaMask
+        const walletConnected = await connectWallet();
+        if (!walletConnected) {
+            console.log('Wallet connection failed or was refused.');
+            return; // Exit if the wallet connection wasn't successful
+        }
+
+        // Proceed to redeem DAI only if the wallet is connected
+        console.log("redeeming dai");
+        await redeemDAI();
+    });
+
+
 });

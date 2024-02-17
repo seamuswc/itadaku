@@ -31,7 +31,7 @@ class RedeemController extends Controller
     public function markAsRedeemed(Request $request, $redeemId)
     {
         $request->validate([
-            'shipping_number' => 'required|string|max:255',
+            'tracking_number' => 'required|string|max:255',
         ]);
 
         $redeem = Redeem::find($redeemId);
@@ -50,7 +50,7 @@ class RedeemController extends Controller
 
         Done::create([
             'redeem_id' => $redeemId,
-            'shipping_number' => $request->shipping_number,
+            'tracking_number' => $request->tracking_number,
         ]);
 
         return back()->with('success', 'Item marked as redeemed successfully.');

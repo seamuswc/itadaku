@@ -1,5 +1,5 @@
 const config = {
-    CONTRACT_ADDRESS: "0xFC94F9A9ae340F75411728D319C78ee9ed542AdF",
+    CONTRACT_ADDRESS: "0x11855Bb2C8Fc7234f004150788998d196e5744e1",
     ABI:[
         {
             "inputs": [
@@ -248,6 +248,19 @@ const config = {
             ],
             "name": "OwnershipTransferred",
             "type": "event"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "uint32",
+                    "name": "tokenId",
+                    "type": "uint32"
+                }
+            ],
+            "name": "pullNFT",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
         },
         {
             "inputs": [],

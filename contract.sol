@@ -11,7 +11,7 @@ contract DAIForNFT is ERC721, Ownable(msg.sender) {
     uint32 public tokenCounter;
     uint256 public NFT_COST; // NFT cost, set in constructor
 
-    constructor(address _dai, uint256 _nftCost) ERC721("DAIForNFT", "D4N") {
+    constructor(address _dai, uint256 _nftCost) ERC721("ITADAKU", "ITA") {
         dai = IERC20(_dai);
         NFT_COST = _nftCost * 10**18; // Convert DAI to smallest unit
         tokenCounter = 0;

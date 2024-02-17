@@ -61,13 +61,13 @@
                                     <!-- Redeem Form -->
                                     @if (!$redeem->redeemed)
                                         <!-- Tracking Form -->
-                                        <form action="{{ route('redeems.redeem', $redeem->nft_id) }}" method="POST">
+                                        <form action="{{ route('redeem.markAsRedeemed', $redeem->id) }}" method="POST">
                                             @csrf
                                             <div class="form-group">
-                                                <label for="tracking_number-{{ $redeem->id }}">tracking Number</label>
-                                                    <input type="text" class="form-control" id="tracking_number-{{ $redeem->id }}" name="shipping_number" required>
+                                                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 text-sm rounded">Mark as Redeemed</button>
+
+                                                <input type="text" class="form-control" id="tracking_number-{{ $redeem->id }}" name="tracking_number" required>
                                             </div>
-                                            <button type="submit" class="btn btn-success mt-2">Mark as Redeemed</button>
                                         </form>
                                     
                                     @endif
@@ -88,7 +88,7 @@
                             @forelse ($dones as $done)
                                     <div class="done bg-gray-50 p-4 rounded-lg shadow mb-4">
                                         <p>ID: {{ $done->redeem_id }}</p>
-                                        <p>Tracking Number: {{ $done->shipping_number }}</p>        
+                                        <p>Tracking Number: {{ $done->tracking_number }}</p>        
                                     </div>
                                 @empty
                                     <p>No Dones found.</p>

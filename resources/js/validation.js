@@ -51,39 +51,43 @@ function validateMint(form, namedInputs) {
 }
 
 // Function to validate a form with all fields required
-function validateRedeem(form) {
-    let isValid = true;
+function validateRedeem(form, namedInputs) {
+    let isValid = true; 
 
-    $(form).find('input').each(function() {
-        const input = $(this);
-        const value = input.val().trim();
-        let isInvalid = false;
-
-        // Check if the field is empty
-        if (value === '') {
-            isInvalid = true;
-        } else if (input.attr('type') === 'email' && !validateEmail(value)) {
-            // Email validation
-            isInvalid = true;
-        } else if (input.attr('name') === 'phone' && !validateJapanesePhoneNumber(value)) {
-            // Japanese phone number validation
-            isInvalid = true;
-        } else if (input.attr('name') === 'nft_id' && !isInteger(value)) {
-            // Integer validation for nft_id
-            isInvalid = true;
+    namedInputs.forEach(function(name) {
+        const input = $(form).find(`input[name="${name}"]`);
+        if (!input.length) {
+            console.error("input not found: ", name);
+            isValid = false; 
+            return;
         }
 
-        // Add or remove validation feedback
-        if (isInvalid) {
-            isValid = false;
+        const value = input.val().trim();
+        
+        if (value === '') {
+            console.log(input.attr('name'));
             input.addClass('is-danger');
+            isValid = false;
+        } else if (input.attr('type') === 'email' && !validateEmail(value)) {
+            console.log(input.attr('name'));
+            input.addClass('is-danger');
+            isValid = false;
+        } else if (input.attr('name') === 'phone' && !validateJapanesePhoneNumber(value)) {
+            console.log(input.attr('name'));
+            input.addClass('is-danger');
+            isValid = false;
+        } else if (input.attr('name') === 'nft_id' && !isInteger(value)) {
+            console.log(input.attr('name'));
+            input.addClass('is-danger');
+            isValid = false;
         } else {
             input.removeClass('is-danger');
         }
     });
 
-    return isValid;
+    return isValid; 
 }
+
 
 
 $(document).ready(function() {
@@ -122,14 +126,14 @@ $(document).ready(function() {
             }
 
            let tx_hash = await mintNFT();
-           console.log(tx_hash);
+           console.log("mint hash: ", tx_hash);
 
             //get past `Transfer` events from block 18850576
             let nft_id = await mintEvent();
-            console.log(nft_id.toString());
+            console.log("mint nft id: ", nft_id.toString());
 
             
-           if(nft_id || tx_hash) {
+           if(tx_hash) {
                 $('#nft_id').val(nft_id);
                 $('#tx_hash').val(tx_hash);
 
@@ -149,23 +153,25 @@ $(document).ready(function() {
             if(!walletConnected) {
                 return;
             }
-
-            //await redeemDAI();
-
-            
         
-            if (!validateRedeem(redeemForm)) {
+            let namedInputsToValidate = ['nft_id', 'email', 'phone', 'mailing_address_1', 'mailing_address_2', 'mailing_address_3']; 
+            if (!validateRedeem(redeemForm, namedInputsToValidate)) {
+                console.log("invalid form");
                 return; // Form is not valid, stop here
             }
 
-            var nftId = $('input[name="nft_id"]').val();
+             //be careful, it will look for the blank mint nft id
+            var nftId = parseInt($("#nft_id_redeem").val(), 10); // Convert to integer
+
+            console.log("nft id", nftId);
 
             let tx_hash = await pullNFT(nftId);
+            console.log("redeem Hash: ", tx_hash);
 
 
             
-            if(nftId || tx_hash) {
-                $('#tx_hash').val(tx_hash);
+            if(tx_hash) {
+                $('#tx_hash_redeem').val(tx_hash); //be careful, it will look for the mint hash
 
                 redeemForm.off('submit').submit();
             }

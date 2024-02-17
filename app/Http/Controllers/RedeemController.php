@@ -30,9 +30,7 @@ class RedeemController extends Controller
 
     public function markAsRedeemed(Request $request, $redeemId)
     {
-        $request->validate([
-            'tracking_number' => 'required|string|max:255',
-        ]);
+        
 
         $redeem = Redeem::find($redeemId);
         

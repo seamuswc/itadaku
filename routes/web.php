@@ -52,7 +52,8 @@ Route::get('/redeem/success', function () {
 })->name('redeem.success');
 
 //Auth stuff
-Route::post('/redeems/{redeem}/redeem', [RedeemController::class, 'markAsRedeemed'])->name('redeems.redeem');
+
+Route::post('/redeem/{redeemId}/mark-as-redeemed', [RedeemController::class, 'markAsRedeemed'])->name('redeem.markAsRedeemed');
 
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])

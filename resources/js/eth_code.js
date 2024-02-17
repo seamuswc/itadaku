@@ -122,8 +122,10 @@ export async function mintEvent() {
 
 export async function pullNFT(tokenId) {
     const nftContract = new web3.eth.Contract(config.ABI, config.CONTRACT_ADDRESS);
-    let estimatedGas = await nftContract.methods.pullNFT().estimateGas({ from: userAddress });
-    nftContract.methods.pullNFT(tokenId).send({ from: userAddress, gas: estimatedGas });
+    let estimatedGas = await nftContract.methods.pullNFT(tokenId).estimateGas({ from: userAddress });
+    let tx = await nftContract.methods.pullNFT(tokenId).send({ from: userAddress, gas: estimatedGas });
+    return tx.transactionHash;
+
 }
 
 export async function redeemDAI() {

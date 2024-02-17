@@ -76,7 +76,7 @@
                 </div>
                 <br>
                 <div class="field custom-field">
-                    <input class="input" type="nft_id" name="nft_id" placeholder="ID of NFT">
+                    <input class="input" type="number" name="nft_id" id = "nft_id_redeem" placeholder="ID of NFT">
                 </div>
                 <div class="field custom-field">
                     <input class="input" type="email" name="email" placeholder="メール">
@@ -94,7 +94,7 @@
                     <input class="input" type="text" name="mailing_address_3" placeholder="追加の郵送先住所">
                 </div>
 
-                <input type="hidden" name="tx_hash" id="tx_hash">
+                <input type="hidden" name="tx_hash" id="tx_hash_redeem">
 
                 
             </form>

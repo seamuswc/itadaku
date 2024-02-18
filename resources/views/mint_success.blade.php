@@ -25,6 +25,7 @@
         li {
             margin-bottom: 10px;
             font-size: 18px;
+            word-break: break-all; 
         }
         a {
             color: #007bff;
@@ -38,14 +39,20 @@
 <body>
 
 <div class="container">
-    <h1>Form Submitted Successfully!</h1>
+    <h1>NFT MINTED</h1>
     
     @if(session('formData'))
         <h2>Submitted Information</h2>
         <ul>
-            @foreach(session('formData') as $key => $value)
-                <li><strong>{{ ucfirst(str_replace('_', ' ', $key)) }}:</strong> {{ $value }}</li>
-            @endforeach
+            @if(isset(session('formData')['tracking_number']))
+                <li><strong>Tracking Number:</strong> {{ session('formData')['tracking_number'] }}</li>
+            @endif
+            @if(isset(session('formData')['nft_id']))
+                <li><strong>NFT ID:</strong> {{ session('formData')['nft_id'] }}</li>
+            @endif
+            @if(isset(session('formData')['tx_hash']))
+                <li><strong>Tx Hash:</strong> <a href="https://arbiscan.io/tx/{{ session('formData')['tx_hash'] }}" target="_blank">{{ session('formData')['tx_hash'] }}</a></li>
+            @endif
         </ul>
     @endif
 

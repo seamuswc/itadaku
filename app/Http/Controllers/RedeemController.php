@@ -51,6 +51,8 @@ class RedeemController extends Controller
             'tracking_number' => $request->tracking_number,
         ]);
 
+        
+
         return back()->with('success', 'Item marked as redeemed successfully.');
     }
 

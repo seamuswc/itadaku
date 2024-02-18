@@ -81,14 +81,7 @@ export async function approveDAI(amount) {
     await daiContract.methods.approve(config.CONTRACT_ADDRESS, amount).send({ from: userAddress, gas: estimatedGas });
 }
 
-export async function mintNFT() {
-    const nftContract = new web3.eth.Contract(config.ABI, config.CONTRACT_ADDRESS);
 
-    let estimatedGas = await nftContract.methods.mintNFT().estimateGas({ from: userAddress });
-
-    let tx = await nftContract.methods.mintNFT().send({ from: userAddress, gas: estimatedGas });
-    return tx.transactionHash;
-}
 
 export async function getDAIAllowance() {
     const daiContract = new web3.eth.Contract(dai.ABI, dai.CONTRACT_ADDRESS);
@@ -101,6 +94,15 @@ export async function getDAIAllowance() {
         throw error; // or return some error indicator
     }
 }
+
+
+export async function mintNFT() {
+    const nftContract = new web3.eth.Contract(config.ABI, config.CONTRACT_ADDRESS);
+    let estimatedGas = await nftContract.methods.mintNFT().estimateGas({ from: userAddress });
+    let tx = await nftContract.methods.mintNFT().send({ from: userAddress, gas: estimatedGas });
+    return tx.transactionHash;
+}
+//            let tx_hash = await mintNFT();
 
 export async function mintEvent() {
     // Initialize the contract with ABI and address

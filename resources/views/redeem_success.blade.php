@@ -25,6 +25,7 @@
         li {
             margin-bottom: 10px;
             font-size: 18px;
+            word-break: break-all; 
         }
         a {
             color: #007bff;

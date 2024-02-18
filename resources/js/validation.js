@@ -125,9 +125,15 @@ $(document).ready(function() {
                 await approveDAI(cost);
             }
 
-           let tx_hash = await mintNFT();
-           console.log("mint hash: ", tx_hash);
+            // Usage
+       
+            
+            let tx_hash = await mintNFT();
+            console.log("mint hash: ", tx_hash);
 
+            //this times out...ugh
+            //have a standing check for event???
+            
             //get past `Transfer` events from block 18850576
             let nft_id = await mintEvent();
             console.log("mint nft id: ", nft_id.toString());
@@ -199,3 +205,31 @@ $(document).ready(function() {
 
 
 });
+
+
+
+
+
+async function waitForTransactionReceipt(txHash) {
+    const startTime = Date.now();
+    const timeout = 60000; // 60 seconds
+
+    while (Date.now() - startTime < timeout) {
+        try {
+            const receipt = await web3.eth.getTransactionReceipt(txHash);
+            if (receipt) {
+                console.log("Transaction confirmed: ", receipt);
+                return receipt;
+            }
+        } catch (error) {
+            console.error("Error fetching receipt: ", error);
+            throw error;
+        }
+        await new Promise(resolve => setTimeout(resolve, 5000)); // Check every 5 seconds
+    }
+    throw new Error("Transaction confirmation timeout.");
+}
+
+
+
+

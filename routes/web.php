@@ -48,7 +48,7 @@ Route::get('/redeem/success', function () {
     // Clear the session variable
     session()->forget('form_submitted');
 
-    return view('mint_success');
+    return view('redeem_success');
 })->name('redeem.success');
 
 //Auth stuff

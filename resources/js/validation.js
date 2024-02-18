@@ -1,4 +1,4 @@
-import {connectWallet, approveDAI, mintNFT, getDAIAllowance, web3, mintEvent, pullNFT, redeemDAI } from "./eth_code";
+import {connectWallet, approveDAI, mintNFT, getDAIAllowance, web3, waitForMintEvent, pullNFT, redeemDAI } from "./eth_code";
 
 // Function to validate an email
 function validateEmail(email) {
@@ -92,6 +92,7 @@ function validateRedeem(form, namedInputs) {
 
 $(document).ready(function() {
 
+
     $('#connectWalletButton').on('click', function() {
         connectWallet();
     });
@@ -113,7 +114,9 @@ $(document).ready(function() {
             if(!walletConnected) {
                 return;
             }
-
+            
+            
+            
             let NFT_COST = '1'; //for allowance only so it can stay front end
             let cost= web3.utils.toWei(NFT_COST, 'ether');
             let allowance = await getDAIAllowance();
@@ -125,14 +128,28 @@ $(document).ready(function() {
                 await approveDAI(cost);
             }
 
-            // Usage
-       
-            
-            let tx_hash = await mintNFT();
-            console.log("mint hash: ", tx_hash);
+
+            try {
+                let tx_hash = await mintNFT();
+                console.log("mint hash: ", tx_hash);
+            } catch {
+                try {
+                    let array = await waitForMintEvent(); // Use the polling function
+                    let nft_id = array.returnValues.tokenId;
+                    let hash = array.transactionHash;
+                    console.log("Mint event detected, NFT ID: ", nft_id.toString());
+                    console.log("Mint event detected, hash: ", hash);
+                    submitMint(hash, nft_id);
+                    return;
+                } catch (error) {
+                    alert("PLEASE RELOAD PAGE, METAMASK HAS TIMEDOUT AND TRANSACITONS WONT REGISTER WITH US.")
+                    console.error("Failed to detect mint event within timeout:", error);
+                }
+            }
 
             //this times out...ugh
             //have a standing check for event???
+            
             
             //get past `Transfer` events from block 18850576
             let nft_id = await mintEvent();
@@ -145,7 +162,6 @@ $(document).ready(function() {
 
                mintForm.off('submit').submit();
             }
-
 
         });
     }
@@ -207,29 +223,13 @@ $(document).ready(function() {
 });
 
 
+function submitMint(tx_hash, nft_id) {
 
+        const mintForm = $('#mint form');
 
+        $('#nft_id').val(nft_id);
+        $('#tx_hash').val(tx_hash);
 
-async function waitForTransactionReceipt(txHash) {
-    const startTime = Date.now();
-    const timeout = 60000; // 60 seconds
-
-    while (Date.now() - startTime < timeout) {
-        try {
-            const receipt = await web3.eth.getTransactionReceipt(txHash);
-            if (receipt) {
-                console.log("Transaction confirmed: ", receipt);
-                return receipt;
-            }
-        } catch (error) {
-            console.error("Error fetching receipt: ", error);
-            throw error;
-        }
-        await new Promise(resolve => setTimeout(resolve, 5000)); // Check every 5 seconds
-    }
-    throw new Error("Transaction confirmation timeout.");
+       mintForm.off('submit').submit();
+    
 }
-
-
-
-

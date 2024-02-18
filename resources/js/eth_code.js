@@ -70,6 +70,8 @@ export async function connectWallet() {
         console.error("Ethereum browser not detected!");
         return false;
     }
+
+    
 }
 
 export async function approveDAI(amount) {
@@ -95,6 +97,9 @@ export async function getDAIAllowance() {
     }
 }
 
+function test(a) {
+    console.log(a);
+}
 
 export async function mintNFT() {
     const nftContract = new web3.eth.Contract(config.ABI, config.CONTRACT_ADDRESS);
@@ -102,24 +107,9 @@ export async function mintNFT() {
     let tx = await nftContract.methods.mintNFT().send({ from: userAddress, gas: estimatedGas });
     return tx.transactionHash;
 }
-//            let tx_hash = await mintNFT();
+//let tx_hash = await mintNFT();
 
-export async function mintEvent() {
-    // Initialize the contract with ABI and address
-    const nftContract = new web3.eth.Contract(config.ABI, config.CONTRACT_ADDRESS);
-    const currentBlockNumber = await web3.eth.getBlockNumber();
-     // Assume a reasonable range or use 'fromBlock: 0' to 'toBlock: 'latest'' for the complete history
-     const fromBlock = BigInt(currentBlockNumber) - BigInt(500);
-     const toBlock = 'latest';
-    // Fetch the events within a reasonable block range
-    const events = await nftContract.getPastEvents('NFTMinted', {
-        fromBlock: fromBlock,
-        toBlock: toBlock,
-        address: userAddress // Filtering by emitter address
-    });
 
-    return events[events.length - 1].returnValues.tokenId || null;
-}
 
 
 export async function pullNFT(tokenId) {
@@ -143,3 +133,48 @@ export async function redeemDAI() {
             let tx = await nftContract.methods.withdrawDAI(dai).send({ from: userAddress, gas: estimatedGas });
             console.log(tx.transactionHash);
 }
+
+
+
+
+async function mintEvent() {
+    // Initialize the contract with ABI and address
+    const nftContract = new web3.eth.Contract(config.ABI, config.CONTRACT_ADDRESS);
+    const currentBlockNumber = await web3.eth.getBlockNumber();
+     // Assume a reasonable range or use 'fromBlock: 0' to 'toBlock: 'latest'' for the complete history
+     const fromBlock = BigInt(currentBlockNumber) - BigInt(500);
+     const toBlock = 'latest';
+    // Fetch the events within a reasonable block range
+    const events = await nftContract.getPastEvents('NFTMinted', {
+        fromBlock: fromBlock,
+        toBlock: toBlock,
+        address: userAddress // Filtering by emitter address
+    });
+    //console.log("TRIGGERED: ", events[events.length - 1].returnValues.tokenId);
+    return events[events.length - 1] || null;
+}
+
+export async function waitForMintEvent(timeout = 60000) { // default timeout of 30 seconds
+    const startTime = Date.now();
+    while (true) {
+        try {
+            let array = await mintEvent();
+            let nft_id = array.returnValues.tokenId;
+            //let tx_hash = array.transactionHash
+            if (nft_id) {
+                //console.log("TRIGGERED mint nft id: ", nft_id.toString());
+                return array; // Successfully found the event
+            }
+        } catch (error) {
+            console.error("Error fetching mint event:", error);
+            // Optionally handle errors, e.g., by logging or retrying
+        }
+
+        if (Date.now() - startTime > timeout) {
+            throw new Error("Timeout waiting for mint event");
+        }
+
+        await new Promise(resolve => setTimeout(resolve, 1000)); // Wait for 1 second before retrying
+    }
+}
+

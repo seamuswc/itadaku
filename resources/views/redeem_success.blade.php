@@ -39,7 +39,7 @@
 <body>
 
 <div class="container">
-    <h1>Form Submitted Successfully!</h1>
+    <h1>NFT REDEEMED</h1>
     
     @if(session('formData'))
         <h2>Submitted Information</h2>

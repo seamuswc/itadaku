@@ -1,5 +1,5 @@
 const config = {
-    CONTRACT_ADDRESS: "0x11855Bb2C8Fc7234f004150788998d196e5744e1",
+    CONTRACT_ADDRESS: "0x0121BBFA00D18DE7EDd17DB9e771266877AEbB9D",
     ABI:[
         {
             "inputs": [
@@ -228,6 +228,19 @@ const config = {
                 }
             ],
             "name": "NFTMinted",
+            "type": "event"
+        },
+        {
+            "anonymous": false,
+            "inputs": [
+                {
+                    "indexed": true,
+                    "internalType": "uint32",
+                    "name": "tokenId",
+                    "type": "uint32"
+                }
+            ],
+            "name": "NFTPulled",
             "type": "event"
         },
         {

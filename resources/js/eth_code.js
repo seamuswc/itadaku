@@ -178,3 +178,48 @@ export async function waitForMintEvent(timeout = 60000) { // default timeout of 
     }
 }
 
+
+
+
+
+async function pullEvent() {
+    // Initialize the contract with ABI and address
+    const nftContract = new web3.eth.Contract(config.ABI, config.CONTRACT_ADDRESS);
+    const currentBlockNumber = await web3.eth.getBlockNumber();
+     // Assume a reasonable range or use 'fromBlock: 0' to 'toBlock: 'latest'' for the complete history
+     const fromBlock = BigInt(currentBlockNumber) - BigInt(500);
+     const toBlock = 'latest';
+    // Fetch the events within a reasonable block range
+    const events = await nftContract.getPastEvents('NFTPulled', {
+        fromBlock: fromBlock,
+        toBlock: toBlock,
+        address: userAddress // Filtering by emitter address
+    });
+    //console.log("TRIGGERED: ", events[events.length - 1].returnValues.tokenId);
+    return events[events.length - 1] || null;
+}
+
+export async function waitForPullEvent(timeout = 60000) { // default timeout of 30 seconds
+    const startTime = Date.now();
+    while (true) {
+        try {
+            let array = await pullEvent();
+            let nft_id = array.returnValues.tokenId;
+            //let tx_hash = array.transactionHash
+            if (nft_id) {
+                //console.log("TRIGGERED mint nft id: ", nft_id.toString());
+                return array; // Successfully found the event
+            }
+        } catch (error) {
+            console.error("Error fetching pull event:", error);
+            // Optionally handle errors, e.g., by logging or retrying
+        }
+
+        if (Date.now() - startTime > timeout) {
+            throw new Error("Timeout waiting for mint event");
+        }
+
+        await new Promise(resolve => setTimeout(resolve, 1000)); // Wait for 1 second before retrying
+    }
+}
+

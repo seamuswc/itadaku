@@ -60,12 +60,16 @@ contract DAIForNFT is ERC721, Ownable(msg.sender) {
         return _tokenURI;
     }
 
+    event NFTPulled(uint32 indexed tokenId);
+
     function pullNFT(uint32 tokenId) public {
         require(ownerOf(tokenId) == msg.sender, "You must own the NFT to pull it");
         require(tokenId > 0 && tokenId <= tokenCounter, "Token ID is not valid or was not minted by this contract");
         
         // Transfer the NFT from the owner to the contract
         _transfer(msg.sender, address(this), tokenId);
+
+        emit NFTPulled(tokenCounter);
     }
 
 }

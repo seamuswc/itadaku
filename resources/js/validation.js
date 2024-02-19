@@ -1,4 +1,4 @@
-import {connectWallet, approveDAI, mintNFT, getDAIAllowance, web3, waitForMintEvent, pullNFT, redeemDAI } from "./eth_code";
+import {connectWallet, approveDAI, mintNFT, getDAIAllowance, web3, waitForMintEvent, pullNFT, redeemDAI, waitForPullEvent } from "./eth_code";
 
 // Function to validate an email
 function validateEmail(email) {
@@ -133,35 +133,21 @@ $(document).ready(function() {
                 let tx_hash = await mintNFT();
                 console.log("mint hash: ", tx_hash);
             } catch {
-                try {
-                    let array = await waitForMintEvent(); // Use the polling function
-                    let nft_id = array.returnValues.tokenId;
-                    let hash = array.transactionHash;
-                    console.log("Mint event detected, NFT ID: ", nft_id.toString());
-                    console.log("Mint event detected, hash: ", hash);
-                    submitMint(hash, nft_id);
-                    return;
-                } catch (error) {
-                    alert("PLEASE RELOAD PAGE, METAMASK HAS TIMEDOUT AND TRANSACITONS WONT REGISTER WITH US.")
-                    console.error("Failed to detect mint event within timeout:", error);
-                }
+                console.log("1st mint attempt timeout");
             }
-
-            //this times out...ugh
-            //have a standing check for event???
-            
-            
-            //get past `Transfer` events from block 18850576
-            let nft_id = await mintEvent();
-            console.log("mint nft id: ", nft_id.toString());
-
-            
-           if(tx_hash) {
-                $('#nft_id').val(nft_id);
-                $('#tx_hash').val(tx_hash);
-
-               mintForm.off('submit').submit();
+                
+            try {
+                let array = await waitForMintEvent(); // Use the polling function
+                let nft_id = array.returnValues.tokenId;
+                let tx_hash = array.transactionHash;
+                console.log("Mint event detected, NFT ID: ", nft_id.toString());
+                console.log("Mint event detected, hash: ", tx_hash);
+                submitMint(tx_hash, nft_id);
+            } catch (error) {
+                console.error("Failed to detect mint event within timeout:", error);
+                location.reload();
             }
+            
 
         });
     }
@@ -184,22 +170,27 @@ $(document).ready(function() {
 
              //be careful, it will look for the blank mint nft id
             var nftId = parseInt($("#nft_id_redeem").val(), 10); // Convert to integer
-
             console.log("nft id", nftId);
 
-            let tx_hash = await pullNFT(nftId);
-            console.log("redeem Hash: ", tx_hash);
-
-
             
-            if(tx_hash) {
-                $('#tx_hash_redeem').val(tx_hash); //be careful, it will look for the mint hash
 
-                redeemForm.off('submit').submit();
+            try {
+                let tx_hash_pull = await pullNFT(nftId);
+                console.log("redeem Hash: ", tx_hash_pull);
+            } catch {
+                console.log("1st pull attempt time out");
             }
 
-
-
+            try {
+                    let array = await waitForPullEvent(); // Use the polling function
+                    let tx_hash_pull = array.transactionHash;
+                    console.log("Pull event detected, hash: ", tx_hash_pull);
+                    submitRedeem(tx_hash_pull);
+            } catch (error) {
+                    console.error("Failed to detect pull event within timeout:", error);
+                    location.reload();
+            }
+            
         });
     }
 
@@ -224,12 +215,15 @@ $(document).ready(function() {
 
 
 function submitMint(tx_hash, nft_id) {
+    const mintForm = $('#mint form');
+    $('#nft_id').val(nft_id);
+    $('#tx_hash').val(tx_hash);
+    mintForm.off('submit').submit();
+}
 
-        const mintForm = $('#mint form');
 
-        $('#nft_id').val(nft_id);
-        $('#tx_hash').val(tx_hash);
-
-       mintForm.off('submit').submit();
-    
+function submitRedeem(tx_hash) {
+    const redeemForm = $('#redeem form');
+    $('#tx_hash_redeem').val(tx_hash); //be careful, it will look for the mint hash 
+    redeemForm.off('submit').submit();
 }

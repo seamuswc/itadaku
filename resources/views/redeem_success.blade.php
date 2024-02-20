@@ -44,9 +44,27 @@
     @if(session('formData'))
         <h2>Submitted Information</h2>
         <ul>
-            @foreach(session('formData') as $key => $value)
-                <li><strong>{{ ucfirst(str_replace('_', ' ', $key)) }}:</strong> {{ $value }}</li>
-            @endforeach
+            @if(isset(session('formData')['nft_id']))
+                <li><strong>NFT ID:</strong> {{ session('formData')['nft_id'] }}</li>
+            @endif
+            @if(isset(session('formData')['email']))
+                <li><strong>Email:</strong> {{ session('formData')['email'] }}</li>
+            @endif
+
+            @if(isset(session('formData')['mailing_address_1']))
+                <li><strong>ADDRESS</strong></li>
+                <li> {{ session('formData')['mailing_address_1'] }}</li>
+            @endif
+            @if(isset(session('formData')['mailing_address_2']))
+                <li> {{ session('formData')['mailing_address_2'] }}</li>
+            @endif
+            @if(isset(session('formData')['mailing_address_3']))
+                <li> {{ session('formData')['mailing_address_3'] }}</li>
+            @endif
+            
+            @if(isset(session('formData')['tx_hash']))
+                <li><strong>Tx Hash:</strong> <a href="https://arbiscan.io/tx/{{ session('formData')['tx_hash'] }}" target="_blank">{{ session('formData')['tx_hash'] }}</a></li>
+            @endif
         </ul>
     @endif
 

@@ -235,7 +235,7 @@ async function allMint() {
         submitMint(tx_hash, nft_id);
     } catch (error) {
         console.error("Failed to detect mint event within timeout:", error);
-        alert("DO NOT SUBMIT TRANSACTION, DATA WILL NOT BE PASSED TO OUR SQL.")
+        alert("DO NOT SUBMIT TRANSACTION! DATA WILL NOT BE PASSED TO OUR SQL. TOOK TOO LONG TO SUBMIT ON METAMASK!" );
         location.reload();
     }
 
@@ -273,7 +273,7 @@ async function allRedeem(nftId) {
         submitRedeem(tx_hash_pull);
     } catch (error) {
         console.error("Failed to detect pull event within timeout:", error);
-        alert("DO NOT SUBMIT TRANSACTION, DATA WILL NOT BE PASSED TO OUR SQL.")
+        alert("DO NOT SUBMIT TRANSACTION! DATA WILL NOT BE PASSED TO OUR SQL. TOOK TOO LONG TO SUBMIT ON METAMASK!" );
         location.reload();
     }
 

@@ -128,26 +128,12 @@ $(document).ready(function() {
                 await approveDAI(cost);
             }
 
+        
+            
+            await allMint();
 
-            try {
-                let tx_hash = await mintNFT();
-                console.log("mint hash: ", tx_hash);
-            } catch {
-                console.log("1st mint attempt timeout");
-            }
-                
-            try {
-                let array = await waitForMintEvent(); // Use the polling function
-                let nft_id = array.returnValues.tokenId;
-                let tx_hash = array.transactionHash;
-                console.log("Mint event detected, NFT ID: ", nft_id.toString());
-                console.log("Mint event detected, hash: ", tx_hash);
-                submitMint(tx_hash, nft_id);
-            } catch (error) {
-                console.error("Failed to detect mint event within timeout:", error);
-                alert("DO NOT SUBMIT TRANSACTION, DATA WILL NOT BE PASSED TO OUR SQL.")
-                location.reload();
-            }
+
+
             
 
         });
@@ -174,24 +160,8 @@ $(document).ready(function() {
             console.log("nft id", nftId);
 
             
-
-            try {
-                let tx_hash_pull = await pullNFT(nftId);
-                console.log("redeem Hash: ", tx_hash_pull);
-            } catch {
-                console.log("1st pull attempt time out");
-            }
-
-            try {
-                    let array = await waitForPullEvent(); // Use the polling function
-                    let tx_hash_pull = array.transactionHash;
-                    console.log("Pull event detected, hash: ", tx_hash_pull);
-                    submitRedeem(tx_hash_pull);
-            } catch (error) {
-                    console.error("Failed to detect pull event within timeout:", error);
-                    alert("DO NOT SUBMIT TRANSACTION, DATA WILL NOT BE PASSED TO OUR SQL.")
-                    location.reload();
-            }
+            await allRedeem(nftId);
+            
             
         });
     }
@@ -228,4 +198,83 @@ function submitRedeem(tx_hash) {
     const redeemForm = $('#redeem form');
     $('#tx_hash_redeem').val(tx_hash); //be careful, it will look for the mint hash 
     redeemForm.off('submit').submit();
+}
+
+
+
+
+async function allMint() {
+    try {
+        let tx_hash = await mintNFT();
+        console.log("mint hash: ", tx_hash);
+    } catch (error) {
+        if (error.message.includes("DAI payment failed")) {
+            console.log("DAI payment failed. Ensure you have enough DAI and have approved the transaction.");
+            return;
+        } else if (error.message.includes("user denied transaction signature")) {
+            console.log("Transaction was not signed. Please approve the transaction in MetaMask.");
+            return;
+        } else if (error.message.includes("execution reverted")) {
+            console.error("HELLO: ",error.message);
+            return;
+        } else if (error.message.includes("Internal JSON-RPC error.")) {
+            alert("metamask failure");
+            console.error("HELLO: ",error.message);
+            return;
+        } else {
+            console.log("1st mint attempt failed due to an unexpected error:", error.message);
+        }
+    }
+        
+    try {
+        let array = await waitForMintEvent(); // Use the polling function
+        let nft_id = array.returnValues.tokenId;
+        let tx_hash = array.transactionHash;
+        console.log("Mint event detected, NFT ID: ", nft_id.toString());
+        console.log("Mint event detected, hash: ", tx_hash);
+        submitMint(tx_hash, nft_id);
+    } catch (error) {
+        console.error("Failed to detect mint event within timeout:", error);
+        alert("DO NOT SUBMIT TRANSACTION, DATA WILL NOT BE PASSED TO OUR SQL.")
+        location.reload();
+    }
+
+}
+
+async function allRedeem(nftId) {
+
+    try {
+        let tx_hash_pull = await pullNFT(nftId);
+        console.log("redeem Hash: ", tx_hash_pull);
+    } catch (error) {
+        if (error.message.includes("You must own the NFT to pull it")) {
+            console.error("You must own the NFT to pull it.");
+            return;
+        } else if (error.message.includes("Token ID is not valid or was not minted by this contract")) {
+            console.error("Token ID is not valid or was not minted by this contract.");
+            return;
+        } else if (error.message.includes("execution reverted")) {
+            alert("Metmask error: check nft ID number");
+            console.error("HELLO: ",error.message);
+            return;
+        } else if (error.message.includes("Internal JSON-RPC error.")) {
+            alert("Metmask error: check nft ID number");
+            console.error("HELLO: ",error.message);
+            return;
+        } else {
+            console.error("Failed to pull NFT within timeout:", error.message);
+        }
+    }
+
+    try {
+        let array = await waitForPullEvent(); // Use the polling function
+        let tx_hash_pull = array.transactionHash;
+        console.log("Pull event detected, hash: ", tx_hash_pull);
+        submitRedeem(tx_hash_pull);
+    } catch (error) {
+        console.error("Failed to detect pull event within timeout:", error);
+        alert("DO NOT SUBMIT TRANSACTION, DATA WILL NOT BE PASSED TO OUR SQL.")
+        location.reload();
+    }
+
 }

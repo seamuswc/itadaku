@@ -48,6 +48,7 @@ class RedeemController extends Controller
 
         Done::create([
             'redeem_id' => $redeemId,
+            'nft_id' => $redeem->nft_id,
             'tracking_number' => $request->tracking_number,
         ]);
 

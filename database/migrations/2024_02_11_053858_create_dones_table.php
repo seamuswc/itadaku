@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('dones', function (Blueprint $table) {
             $table->id();
             $table->integer('redeem_id');
+            $table->string('nft_id');
             $table->string('tracking_number');
             $table->timestamps();
         });

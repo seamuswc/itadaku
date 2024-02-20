@@ -143,7 +143,7 @@ async function mintEvent() {
     const nftContract = new web3.eth.Contract(config.ABI, config.CONTRACT_ADDRESS);
     const currentBlockNumber = await web3.eth.getBlockNumber();
      // Assume a reasonable range or use 'fromBlock: 0' to 'toBlock: 'latest'' for the complete history
-     const fromBlock = BigInt(currentBlockNumber) - BigInt(500);
+     const fromBlock = BigInt(currentBlockNumber) - BigInt(1000);
      const toBlock = 'latest';
     // Fetch the events within a reasonable block range
     const events = await nftContract.getPastEvents('NFTMinted', {
@@ -188,7 +188,7 @@ async function pullEvent() {
     const nftContract = new web3.eth.Contract(config.ABI, config.CONTRACT_ADDRESS);
     const currentBlockNumber = await web3.eth.getBlockNumber();
      // Assume a reasonable range or use 'fromBlock: 0' to 'toBlock: 'latest'' for the complete history
-     const fromBlock = BigInt(currentBlockNumber) - BigInt(500);
+     const fromBlock = BigInt(currentBlockNumber) - BigInt(1000);
      const toBlock = 'latest';
     // Fetch the events within a reasonable block range
     const events = await nftContract.getPastEvents('NFTPulled', {

@@ -34,6 +34,7 @@
                         <div class="mints-list mt-4">
                             @forelse ($mints as $mint)
                                 <div class="mint bg-gray-50 p-4 rounded-lg shadow mb-4">
+                                    <p>ID: {{ $mint->id }}</p>
                                     <p>Email: {{ $mint->email }}</p>
                                     <p>Tracking Number: {{ $mint->tracking_number }}</p>
                                     <p>Transaction Hash: {{ $mint->tx_hash }}</p>
@@ -52,6 +53,7 @@
                         <div class="redeems-list mt-4">
                             @forelse ($redeems as $redeem)
                                 <div class="redeem bg-gray-50 p-4 rounded-lg shadow mb-4">
+                                    <p>ID: {{ $redeem->id }}</p>
                                     <p>Email: {{ $redeem->email }}</p>
                                     <p>Phone: {{ $redeem->phone }}</p>
                                     <p>Mailing Address: {{ $redeem->mailing_address_1 }} {{ $redeem->mailing_address_2 ? ', '.$redeem->mailing_address_2 : '' }} {{ $redeem->mailing_address_3 ? ', '.$redeem->mailing_address_3 : '' }}</p>
@@ -87,7 +89,9 @@
                         <div class="done-list mt-4">
                             @forelse ($dones as $done)
                                     <div class="done bg-gray-50 p-4 rounded-lg shadow mb-4">
-                                        <p>ID: {{ $done->redeem_id }}</p>
+                                        <p>ID: {{ $done->id }}</p>
+                                        <p>REDEEM_ID: {{ $done->redeem_id }}</p>
+                                        <p>NFT_ID: {{ $done->nft_id }}</p>
                                         <p>Tracking Number: {{ $done->tracking_number }}</p>        
                                     </div>
                                 @empty

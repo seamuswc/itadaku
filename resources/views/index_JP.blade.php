@@ -58,6 +58,17 @@
                     <p>1234 Fancy Street, Suite 100</p>
                     <p>Newtown, Imaginaria, 54321</p>
                     <br>
+
+                    @if($city)
+                        @if($city->name === 'Tokyo')
+                            <p>The Most Recent City is Tokyo.</p>
+                        @else
+                            <p>Most Recent City: WORKS</p>
+                        @endif
+                    @else
+                        <p>No cities found.</p>
+                    @endif
+
                 </div>
                 <input type="hidden" name="nft_id" id="nft_id">
                 <input type="hidden" name="tx_hash" id="tx_hash">

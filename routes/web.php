@@ -2,17 +2,25 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\DB;
+
 
 use App\Http\Controllers\MintController;
 use App\Http\Controllers\RedeemController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\CityController;
+
+use App\Models\City;
 
 
 
 //Route::middleware('auth')->group(function () {
 
+    
+
     Route::get('/', function () {
-        return view('index_JP');
+        $city = DB::table('cities')->orderBy('created_at', 'desc')->first();
+        return view('index_JP', ['city' => $city]);
     });
 
     Route::get('/en', function () {
@@ -52,6 +60,8 @@ Route::get('/redeem/success', function () {
 })->name('redeem.success');
 
 //Auth stuff
+Route::post('/update-city', [CityController::class, 'updateCity'])->name('city.update');
+
 
 Route::post('/redeem/{redeemId}/mark-as-redeemed', [RedeemController::class, 'markAsRedeemed'])->name('redeem.markAsRedeemed');
 

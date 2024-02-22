@@ -26,6 +26,7 @@
                         <button id="show-mints" class="tab-button mr-4 py-2 px-4 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-gray-700">Mints</button>
                         <button id="show-redeems" class="tab-button mr-4 py-2 px-4 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-gray-700">Redeems</button>
                         <button id="show-done" class="tab-button py-2 px-4 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-gray-700">Done</button>
+                        <button id="show-cities" class="tab-button mr-4 py-2 px-4 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-gray-700">Cities</button>
                     </nav>
 
                     <!-- Mints Section -->
@@ -99,6 +100,29 @@
                                 @endforelse
                         </div>
                     </div>
+
+                    <!--Cities-->
+                    <div id="cities-section" class="tab-content" style="display: none;">
+                        <h3 class="font-semibold text-lg text-gray-800 leading-tight">Select City</h3>
+                        <br>
+                        <h3 class="font-semibold text-lg text-gray-800 leading-tight">CURRENTLY:{{ $city->city }} </h3>                    
+
+                        <br>
+
+                        <form action="/update-city" method="POST">
+                            @csrf <!-- CSRF Token for security -->
+                            <input type="hidden" name="city" value="Fukuoka">
+                            <button type="submit" class="city-btn bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Fukuoka</button>
+                        </form>
+                        
+                        <form action="/update-city" method="POST">
+                            @csrf <!-- CSRF Token for security -->
+                            <input type="hidden" name="city" value="Tokyo">
+                            <button type="submit" class="city-btn bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Tokyo</button>
+                        </form>
+                    </div>
+
+
                 </div>
             </div>
         </div>
@@ -117,6 +141,10 @@
 
             // Initially show the 'mints' section
             $('#mints-section').show();
+
+
+
+   
 
 
         });

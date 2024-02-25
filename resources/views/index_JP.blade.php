@@ -53,20 +53,24 @@
                 </div>
                 
                 <div class="has-text-centered">
-                    <br>
-                    <p>送付先住所:</p>
-                    <p>1234 Fancy Street, Suite 100</p>
-                    <p>Newtown, Imaginaria, 54321</p>
-                    <br>
+                    
 
                     @if($city)
-                        @if($city->name === 'Tokyo')
-                            <p>The Most Recent City is Tokyo.</p>
+                        @if($city == 'Tokyo')
+                            <br>
+                            <p>送付先住所:</p>
+                            <p>Tokyo</p>
+                            <p>Newtown, Imaginaria, 54321</p>
+                            <br>
                         @else
-                            <p>Most Recent City: WORKS</p>
+                            <br>
+                            <p>送付先住所:</p>
+                            <p>FUKUPLA</p>
+                            <p>Newtown, Imaginaria, 54321</p>
+                            <br>
                         @endif
                     @else
-                        <p>No cities found.</p>
+                        <p>Service Temporarily Halted</p>
                     @endif
 
                 </div>

@@ -20,7 +20,7 @@ use App\Models\City;
 
     Route::get('/', function () {
         $city = DB::table('cities')->orderBy('created_at', 'desc')->first();
-        return view('index_JP', ['city' => $city]);
+        return view('index_JP', ['city' => $city->city]);
     });
 
     Route::get('/en', function () {

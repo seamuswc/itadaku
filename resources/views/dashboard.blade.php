@@ -40,7 +40,7 @@
                                     <p>Tracking Number: {{ $mint->tracking_number }}</p>
                                     <p>Transaction Hash: {{ $mint->tx_hash }}</p>
                                     <p>NFT ID: {{ $mint->nft_id }}</p>
-                                    <!-- Add other mint details here -->
+                                    <p>Expiry Date: {{ \Carbon\Carbon::parse($mint->created_at)->addDays(375)->format('m/d/Y') }}</p>
                                 </div>
                             @empty
                                 <p>No mints found.</p>

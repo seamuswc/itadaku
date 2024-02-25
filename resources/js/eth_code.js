@@ -61,6 +61,7 @@ export async function connectWallet() {
             // Assuming that the switch was successful, the network should now be Arbitrum
             $("#walletAddress").text(userAddress);
             $('#networkConnected').text("Arbitrum");
+            $("#connectWalletButton").text("Connected")
 
             return true;
         } catch (error) {

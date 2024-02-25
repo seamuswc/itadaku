@@ -8,6 +8,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/4.4.0/web3.min.js" integrity="sha512-9KPDCVlm3clvZUmFQLt9apyK2Z8PyDyaOVtaBiwefKt2S+UzLFMJ61PQ6AhWFrYkOe4tR0qdClm4xnA3L8brcw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css">
     <!--<link rel="stylesheet" href="{{ asset('css/styles.css') }}">-->
+    <style>
+        ul {
+            list-style-type: none !important;  
+        }
+
+    </style>
 </head>
 <body>
 
@@ -91,7 +97,7 @@
                 </div>
                 <br>
                 <div class="field custom-field">
-                    <input class="input" type="number" name="nft_id" id = "nft_id_redeem" placeholder="ID of NFT">
+                    <input class="input" type="number" name="nft_id" id = "nft_id_redeem" placeholder="NFTのID">
                 </div>
                 <div class="field custom-field">
                     <input class="input" type="email" name="email" placeholder="メール">
@@ -120,10 +126,33 @@
     <section id="docs" class="section">
         <div class="custom-container">
             <div class="content custom-content">
-                <h2 class="custom-title">ドキュメント</h2>
-                <p>当サイトへようこそ！当プラットフォームの使用方法について知りたいことが全てここにあります。ミントするものか引き換えるものか、私たちがサポートします。</p>
-                <p>当プラットフォームは、デジタル資産のミント化、オファーの引き換え、ポートフォリオの簡単な管理など、様々な機能を提供しています。</p>
-                <p>私たちはユーザーにシームレスな体験を提供することに尽力しています。ご質問がある場合や支援が必要な場合は、いつでもサポートチームがお手伝いします。</p>
+            <h1>Single Package or Letter Mail Storage and Redelivery For 1 Year</h1>
+
+            <h2>Minting your NFT:</h2>
+            <ul>
+                <li>Costs $25 DAI to Mint a NFT representing your single package.</li>
+                <li>After minting, you can mail us your package.</li>
+            </ul>
+
+   
+    <h2>Package Mailing Rules:</h2>
+    <ul>
+        <li>Under 2 Kilos</li>
+        <li>Dimensions: Size: Height + Width + Depth <= 200cm</li>
+    </ul>
+
+    <p>After minting your NFT, you have 375 days (1 Year plus 10 days) to redeem your package.</p>
+
+    <h2>Redeeming Your NFT:</h2>
+    <ul>
+        <li>Address must be in Japan</li>
+        <li>Phone number must be Japanese</li>
+        <li>Will be mailed with Japan Post</li>
+    </ul>
+<br>
+    <p>Please keep your transaction hashes for customer service.</p>
+    <p>Email: <a href="mailto:jamesthaiphone@gmail.com">jamesthaiphone@gmail.com</a></p>
+    <p><b>All packages are subject to Japan law.</b></p>
             </div>
         </div>
     </section>
